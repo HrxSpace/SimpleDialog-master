@@ -160,13 +160,13 @@ public class SimpleDialog extends DialogFragment {
                 if (builder.getContentGravity() != null) {//标题位置
                     switch (builder.getContentGravity()) {
                         case LEFT:
-                            mTitle.setGravity(Gravity.START);
+                            mContent.setGravity(Gravity.START);
                             break;
                         case RIGHT:
-                            mTitle.setGravity(Gravity.END);
+                            mContent.setGravity(Gravity.END);
                             break;
                         case CENTER:
-                            mTitle.setGravity(Gravity.CENTER);
+                            mContent.setGravity(Gravity.CENTER);
                             break;
                     }
                 }
@@ -180,10 +180,10 @@ public class SimpleDialog extends DialogFragment {
                 if (builder.getRightBtnColor() != 0) {
                     mBtnLeft.setTextColor(ContextCompat.getColor(getActivity(), builder.getRightBtnColor()));
                 }
-                if (builder.getRightBtnSize() != 0) {
-                    mBtnLeft.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(builder.getRightBtnSize()));
+                if (builder.getLeftBtnSize() != 0) {
+                    mBtnLeft.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(builder.getLeftBtnSize()));
                 }
-                if (builder.isRightBtnBold()) {
+                if (builder.isLeftBtnBold()) {
                     mBtnLeft.setTypeface(Typeface.DEFAULT_BOLD);
                 }
                 if (builder.getOnLeftClicked() != null) {
@@ -227,7 +227,7 @@ public class SimpleDialog extends DialogFragment {
                     mBtnRight.setTextColor(ContextCompat.getColor(getActivity(), builder.getRightBtnColor()));
                 }
                 if (builder.getRightBtnSize() != 0) {
-                    mBtnRight.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(builder.getLeftBtnSize()));
+                    mBtnRight.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(builder.getRightBtnSize()));
                 }
                 if (builder.isRightBtnBold()) {
                     mBtnRight.setTypeface(Typeface.DEFAULT_BOLD);
@@ -268,21 +268,18 @@ public class SimpleDialog extends DialogFragment {
                 }, time);
             }
             //按键面板位置
-            if (builder.getPanelGravity() != null) {
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            if (builder.getPanelGravity() != null && mBtnPanel != null) {
                 switch (builder.getPanelGravity()) {
                     case LEFT:
-                        params.gravity = Gravity.START;
+                        mBtnPanel.setGravity(Gravity.START);
                         break;
                     case RIGHT:
-                        params.gravity = Gravity.END;
+                        mBtnPanel.setGravity(Gravity.END);
                         break;
                     case CENTER:
-                        params.gravity = Gravity.CENTER;
+                        mBtnPanel.setGravity(Gravity.CENTER);
                         break;
                 }
-                if (mBtnPanel != null)
-                    mBtnPanel.setLayoutParams(params);
             }
         }
     }
