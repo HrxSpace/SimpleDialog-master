@@ -131,13 +131,13 @@ public class SimpleDialog extends DialogFragment {
                 if (builder.getSubTitleGravity() != null) {//标题位置
                     switch (builder.getSubTitleGravity()) {
                         case LEFT:
-                            mTitle.setGravity(Gravity.START);
+                            mSubTitle.setGravity(Gravity.START);
                             break;
                         case RIGHT:
-                            mTitle.setGravity(Gravity.END);
+                            mSubTitle.setGravity(Gravity.END);
                             break;
                         case CENTER:
-                            mTitle.setGravity(Gravity.CENTER);
+                            mSubTitle.setGravity(Gravity.CENTER);
                             break;
                     }
                 }
@@ -177,8 +177,8 @@ public class SimpleDialog extends DialogFragment {
             //左键
             if (builder.getLeftBtnText() != null) {
                 mBtnLeft.setText(builder.getLeftBtnText());
-                if (builder.getRightBtnColor() != 0) {
-                    mBtnLeft.setTextColor(ContextCompat.getColor(getActivity(), builder.getRightBtnColor()));
+                if (builder.getLeftBtnColor() != 0) {
+                    mBtnLeft.setTextColor(ContextCompat.getColor(getActivity(), builder.getLeftBtnColor()));
                 }
                 if (builder.getLeftBtnSize() != 0) {
                     mBtnLeft.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(builder.getLeftBtnSize()));
@@ -245,8 +245,7 @@ public class SimpleDialog extends DialogFragment {
             }
             //图片资源
             if (builder.getImageRecourse() != 0) {
-                Drawable imageRes = VectorDrawableCompat.create(getResources(), builder.getImageRecourse(), getActivity().getTheme());
-                mImage.setImageDrawable(imageRes);
+                mImage.setImageResource(builder.getImageRecourse());
             } else if (builder.getImageDrawable() != null) {
                 mImage.setImageDrawable(builder.getImageDrawable());
             } else {
@@ -256,7 +255,7 @@ public class SimpleDialog extends DialogFragment {
             if (builder.getBackgroundColor() != 0) {
                 mCardView.setCardBackgroundColor(ContextCompat.getColor(getActivity(), builder.getBackgroundColor()));
             }
-
+            //自动关闭
             if (builder.isAutoClose()) {
                 int time = builder.getTimeToHide() != 0 ? builder.getTimeToHide() : 10000;
                 new Handler().postDelayed(new Runnable() {
