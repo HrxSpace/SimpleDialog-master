@@ -1,7 +1,6 @@
 package com.kaka.simpledialog_master;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,8 +19,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.open_dialog:
-                new SimpleDialog.Builder(MainActivity.this)
-                        .setImageDrawable(getResources().getDrawable(R.mipmap.ic_launcher))
+                final SimpleDialog.Builder sb= new SimpleDialog.Builder(MainActivity.this);
+                        sb.setImageDrawable(getResources().getDrawable(R.mipmap.ic_launcher))
                         .setTitleText("大标题")
                         .setSubTitleText("小标题")
                         .setContentText("正文\n内容")
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .setOnRightClicked(new SimpleDialog.OnRightClicked() {
                             @Override
                             public void OnClick(View view, Dialog dialog) {
-                                Toast.makeText(MainActivity.this, "右按键", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "右按键--"+sb.getInputText(), Toast.LENGTH_SHORT).show();
                             }
                         })
                         .setOnLeftClicked(new SimpleDialog.OnLeftClicked() {

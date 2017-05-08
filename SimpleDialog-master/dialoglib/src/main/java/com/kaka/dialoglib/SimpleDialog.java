@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -43,6 +43,7 @@ public class SimpleDialog extends DialogFragment {
     private CardView mCardView;//整个View
     private AppCompatImageView mImage;//头部图片
     private TextView mTitle, mSubTitle, mContent;//主标题，副标题，正文
+    private EditText mInput;//输入框
     private Button mBtnLeft, mBtnMiddle, mBtnRight;//左按键，中按键，右按键
     private LinearLayout mBtnPanel;//按键面板
 
@@ -144,7 +145,12 @@ public class SimpleDialog extends DialogFragment {
             } else {
                 mSubTitle.setVisibility(View.GONE);
             }
-
+            //输入框
+            if (builder.isShowInputBorder()) {
+                mInput.setHint(builder.getInputHintText());
+            } else {
+                mInput.setVisibility(View.GONE);
+            }
             //正文
             if (builder.getContentText() != null) {
                 mContent.setText(builder.getContentText());
@@ -285,13 +291,14 @@ public class SimpleDialog extends DialogFragment {
 
     private void initViews(View view) {
         mCardView = (CardView) view.findViewById(R.id.card_view);
-        mImage = (AppCompatImageView) view.findViewById(R.id.image);
-        mTitle = (TextView) view.findViewById(R.id.tx_title);
-        mSubTitle = (TextView) view.findViewById(R.id.tx_sub_title);
-        mContent = (TextView) view.findViewById(R.id.content);
-        mBtnLeft = (Button) view.findViewById(R.id.btn_right);
+        mImage = (AppCompatImageView) view.findViewById(R.id.iv_header);
+        mTitle = (TextView) view.findViewById(R.id.tv_title);
+        mSubTitle = (TextView) view.findViewById(R.id.tv_sub_title);
+        mInput = (EditText) view.findViewById(R.id.et_input);
+        mContent = (TextView) view.findViewById(R.id.tv_content);
+        mBtnLeft = (Button) view.findViewById(R.id.btn_left);
         mBtnMiddle = (Button) view.findViewById(R.id.btn_middle);
-        mBtnRight = (Button) view.findViewById(R.id.btn_left);
+        mBtnRight = (Button) view.findViewById(R.id.btn_right);
         mBtnPanel = (LinearLayout) view.findViewById(R.id.btns_panel);
     }
 
@@ -314,6 +321,8 @@ public class SimpleDialog extends DialogFragment {
 
         private String titleText;//大标题内容
         private String subTitleText;//副标题内容
+        private boolean showInputBorder;//true--显示输入框，false-不显示
+        private String inputHintText;//输入框默认内容
         private String contentText;//正文内容
 
         private OnLeftClicked onLeftClicked;//左按键监听
@@ -380,6 +389,12 @@ public class SimpleDialog extends DialogFragment {
 
         public Builder setSubTitleText(String subTitleText) {
             this.subTitleText = subTitleText;
+            return this;
+        }
+
+        public Builder setInputBorder(boolean showInputBorder, String inputHintText) {
+            this.showInputBorder = showInputBorder;
+            this.inputHintText = inputHintText;
             return this;
         }
 
@@ -589,6 +604,18 @@ public class SimpleDialog extends DialogFragment {
             return subTitleText;
         }
 
+        public boolean isShowInputBorder() {
+            return showInputBorder;
+        }
+
+        public String getInputHintText() {
+            return inputHintText;
+        }
+
+        public String getInputText() {
+            return SimpleDialog.getInstance().mInput.getText().toString();
+        }
+
         public String getContentText() {
             return contentText;
         }
@@ -749,6 +776,8 @@ public class SimpleDialog extends DialogFragment {
             dest.writeString(this.rightBtnText);
             dest.writeString(this.titleText);
             dest.writeString(this.subTitleText);
+            dest.writeByte(this.showInputBorder ? (byte) 1 : (byte) 0);
+            dest.writeString(this.inputHintText);
             dest.writeString(this.contentText);
             dest.writeByte(this.autoClose ? (byte) 1 : (byte) 0);
             dest.writeInt(this.timeToHide);
@@ -785,6 +814,8 @@ public class SimpleDialog extends DialogFragment {
             this.rightBtnText = in.readString();
             this.titleText = in.readString();
             this.subTitleText = in.readString();
+            this.showInputBorder = in.readByte() != 0;
+            this.inputHintText = in.readString();
             this.contentText = in.readString();
             this.autoClose = in.readByte() != 0;
             this.timeToHide = in.readInt();
